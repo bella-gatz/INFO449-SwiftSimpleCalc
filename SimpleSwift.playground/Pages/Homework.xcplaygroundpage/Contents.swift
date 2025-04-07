@@ -27,11 +27,93 @@ print("Welcome to the UW Calculator Playground")
 //: For this latter set of operations, it is safe to assume that `["count"]` (with no additional arguments) is 0, `["avg"]` is also 0, and `["fact"]` is 0. `["1", "fact"]` should return 1, and `["0", "fact"]` should also return 1. (Yes, 0-factorial is 1. True story.)
 //: 
 func calculate(_ args: [String]) -> Int {
-    return -1
+//    ✅iterate over string args,
+//    ✅turn into ints []
+//    ✅apply function to ints
+    var total = 0
+    var nums = [Int]()
+    var calc = ""
+    var op = ["+", "-", "*", "/", "%", "count", "avg", "fact"] // possible operators
+//    var calc = Int()
+    for arg in args {
+//        check if operator
+        if op.contains(arg) {
+            calc = arg
+
+        } else {
+            var curr = Int(arg)!
+//            return curr
+            nums.append(curr)
+        }
+    }
+    
+    for num in nums {
+        if nums.count == 0 {
+            return nums[0]
+        } else if calc == "+" || calc == "avg" {
+            total += num
+        } else if calc == "-" {
+            total = nums[0] - nums[1]
+        } else if calc == "*" {
+            if (total == 0) {
+                total += 1
+            }
+            total *= num
+        } else if calc == "/" {
+            total = nums[0] / nums[1]
+        } else if calc == "count" {
+            return nums.count
+        } else if calc == "fact" {
+            total += 1
+            if (num < 0) {
+                return -1
+            }
+            var pointer = num
+            while pointer > 0 {
+                total *= pointer
+                pointer -= 1
+            }
+            return total
+        } else if calc == "%" {
+            total = nums[0] % nums[1]
+            print(nums, total)
+
+            return total
+        }
+    }
+    
+    if calc == "avg" && nums.count > 0 {
+        total /= nums.count
+    }
+
+    print(nums, calc, total)
+    return total
 }
 
 func calculate(_ arg: String) -> Int {
-    return -1
+    // i want to turn this into parameters for other calc func
+    var arr = [String]()
+    var currWord = ""
+    var i = arg.startIndex
+    
+    while i < arg.endIndex {
+        if arg[i] != " " {
+            var char = String(arg[arg.index(i, offsetBy: 0)])
+            currWord += char
+        } else if currWord != "" {
+            arr.append(currWord)
+            currWord = ""
+        }
+        i = arg.index(after: i)
+    }
+    
+    if currWord != "" {
+        arr.append(currWord)
+    }
+
+//    print(arr)
+    return calculate(arr)
+
 }
 
 //: Below this are the test expressions/calls to verify if your code is correct.
@@ -85,7 +167,7 @@ calculate("5 fact") == 120
 //: Implement `calculate([String])` and `calculate(String)` to handle negative numbers. You need only make the tests below pass. (You do not need to worry about "fact"/factorial with negative numbers, for example.)
 //:
 //: This is worth 1 pt
-/*
+
 calculate(["2", "+", "-2"]) == 0
 calculate(["2", "-", "-2"]) == 4
 calculate(["2", "*", "-2"]) == -4
@@ -100,7 +182,7 @@ calculate("2 - -2") == 4
 calculate("-2 / 2") == -1
 
 calculate("1 -2 3 -4 5 count") == 5
-*/
+
  
 //: Implement `calculate([String])` and `calculate(String)` to use 
 //: and return floating-point values. You need only make the tests 
